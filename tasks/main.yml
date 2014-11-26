@@ -136,7 +136,7 @@
    - sendmail
 
 - name: administration | Copy the sendmail configuration file
-  template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.conf mode=0755
+  template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: configure
 
