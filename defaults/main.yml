@@ -10,3 +10,9 @@ mailserver: smtp.gmail.com
 #See http://brokenbad.com/better-handling-of-public-ssh-keys-using-ansible/
 base_admin_username: ubuntu # something non-root
 base_admin_keys: []
+
+root_ssh_rsa_key_file: "~/.ssh/id_rsa.pub" # Set private ssh RSA key for root user (path to local file)
+root_ssh_dsa_key_file: "~/.ssh/id_dsa.pub" # Set private ssh DSA key for root user (path to local file)
+root_home: "/root"
+root_user: "root"
+root_group: "root"

@@ -9,16 +9,26 @@
 - name: Creates destination directory
   # Workaround for #2372
   file: state=directory mode=0700 dest=/root/.ssh/
-      
-- name: Pushes user's rsa key to root's vagrant box (it's ok if this TASK fails)
-  # action: authorized_key user=root key='$FILE(~/.ssh/id_rsa.pub)'
-  # Workaround for #2372
-  copy: src=~/.ssh/id_rsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
+
+- name: Pushes user's rsa key to root's box (it's ok if this TASK fails)
+  copy: >
+    src={{root_ssh_rsa_key_file}}
+    dest={{root_home}}/.ssh/authorized_keys
+    owner={{root_user}}
+#    group={{root_group}}
+    mode=0600
+  sudo: yes    
+#  when: root_ssh_rsa_key_file != ""  
   register: rsa
   ignore_errors: yes
 
-- name: Pushes user's dsa key to root's vagrant box (it's NOT ok if both TASKs fail)
-  # action: authorized_key user=root key='$FILE(~/.ssh/id_dsa.pub)'
-  # Workaround for #2372
-  copy: src=~/.ssh/id_dsa.pub dest=/root/.ssh/authorized_keys owner=root mode=0600
-  when: rsa|failed
+- name: Pushes user's dsa key to root's box (it's ok if this TASK fails)
+  copy: >
+    src={{root_ssh_dsa_key_file}}
+    dest={{root_home}}/.ssh/authorized_keys
+    owner={{root_user}}
+#    group={{root_group}}
+    mode=0600
+  sudo: yes    
+  when: root_ssh_dsa_key_file != ""  
+  when: rsa|failed  

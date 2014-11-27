@@ -4,5 +4,7 @@
 
   roles:
     - { role: ./,
-        ntp_timezone: Europe/Paris
+        ntp_timezone: Europe/Paris,
+        root_ssh_rsa_key_file: "",
+        root_ssh_dsa_key_file: ""
       }
