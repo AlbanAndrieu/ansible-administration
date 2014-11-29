@@ -1,4 +1,4 @@
-## administration
+## alban.andrieu.administration
 
   [![Platforms](http://img.shields.io/badge/platforms-ubuntu-lightgrey.svg?style=flat)](#)
 
@@ -7,14 +7,14 @@ Describe your role in a few paragraphs....
 
 ### Role dependencies
 
-- `geerlingguy.ntp`
+- `alban.andrieu.common`
 
 ### Role variables
 
 List of default variables available in the inventory:
 
 ```yaml
-    #ubuntu
+        #ubuntu
     ntpservers:
       - "ntp.ubuntu.com" 
       - "timehost"
@@ -26,6 +26,12 @@ List of default variables available in the inventory:
     #See http://brokenbad.com/better-handling-of-public-ssh-keys-using-ansible/
     base_admin_username: ubuntu # something non-root
     base_admin_keys: []
+    
+    root_ssh_rsa_key_file: "~/.ssh/id_rsa.pub" # Set private ssh RSA key for root user (path to local file)
+    root_ssh_dsa_key_file: "~/.ssh/id_dsa.pub" # Set private ssh DSA key for root user (path to local file)
+    root_home: "/root"
+    root_user: "root"
+    root_group: "root"
 ```
 
 
@@ -36,7 +42,7 @@ Describe how to use in more detail...
 
 ### Authors and license
 
-`administration` role was written by:
+`alban.andrieu.administration` role was written by:
 - [Alban Andrieu](nabla.mobi) | [e-mail](mailto:alban.andrieu@free.fr) | [Twitter](https://twitter.com/AlbanAndrieu)
 - License: [GPLv3](https://tldrlegal.com/license/gnu-general-public-license-v3-%28gpl-3%29)
 

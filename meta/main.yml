@@ -1,6 +1,8 @@
 ---
 dependencies:
-  - { role: geerlingguy.ntp }
+  - { role: alban.andrieu.common }
+#  - { role: alban.andrieu.hostname }
+#  - { role: geerlingguy.ntp }
 #  - { role: geerlingguy.firewall }
 
 galaxy_info:
@@ -27,7 +29,9 @@ galaxy_info:
 
 ansigenome_info:
   galaxy_id: ''
-
+  galaxy_user: 'alban.andrieu'
+  galaxy_name: 'administration'
+  
   travis: False
 
   synopsis: |
