@@ -37,7 +37,7 @@
     line="{{item}}"
     insertafter="EOF"
     state="present"
-    create="yes"
+#    create="yes"
     mode="0600"
     dest="{{root_home}}/.ssh/authorized_keys"
     owner="{{root_user}}"
