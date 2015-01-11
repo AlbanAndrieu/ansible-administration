@@ -38,10 +38,9 @@
     insertafter="EOF"
     state="present"
     create="yes"
-    mode="0644"
+    mode="0600"
     dest="{{root_home}}/.ssh/authorized_keys"
     owner="{{root_user}}"
     group="{{root_group}}"
-    mode=0600
   sudo: yes
   with_items: root_ssh_authorized_keys_fingerprints
