@@ -145,11 +145,3 @@
 
 #copy current user key
 - include: copy-keys.yml
-
-#TODO use authorized_key instead of copy-keys.yml
-#See http://brokenbad.com/better-handling-of-public-ssh-keys-using-ansible/
-#- name: administration | Checking public keys list
-#  authorized_key:
-#    user: "{{ base_admin_username }}"
-#    key: "{{ item }}"
-#  with_items: base_admin_keys
