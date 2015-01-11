@@ -32,12 +32,12 @@
   when: root_ssh_dsa_key_file != ""
   when: rsa|failed
 
+#    create="yes"
 - name: Setup SSH authorized keys
   lineinfile:
     line="{{item}}"
     insertafter="EOF"
     state="present"
-#    create="yes"
     mode="0600"
     dest="{{root_home}}/.ssh/authorized_keys"
     owner="{{root_user}}"
