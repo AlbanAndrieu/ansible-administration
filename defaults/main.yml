@@ -9,6 +9,7 @@ mailserver: smtp.gmail.com
 root_ssh_rsa_key_file: "~/.ssh/id_rsa.pub" # Set private ssh RSA key for root user (path to local file)
 root_ssh_dsa_key_file: "~/.ssh/id_dsa.pub" # Set private ssh DSA key for root user (path to local file)
 
+root_ssh_authorized_keys_enabled: yes
 root_ssh_authorized_keys_fingerprints:
 # Alban Andrieu
  - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"
