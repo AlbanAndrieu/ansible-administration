@@ -12,15 +12,17 @@
    - snmp #for cacti
    - snmpd #for cacti
 
-
-- name: administration | Make sure multiverse is enabled
+- name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
   sudo: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and apt_install_multiverse_repositories
   with_items: apt_multiverse_repositories
 
-#sudo add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ saucy universe multiverse"
-#sudo add-apt-repository "deb http://us.archive.ubuntu.com/ubuntu/ saucy-updates universe multiverse"
+- name: administration | Make sure multiverse is enabled for AWS tools
+  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
+  sudo: yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and apt_install_multiverse_repositories
+  with_items: apt_multiverse_repositories
 
 - name: administration | Install AWS tools
   apt: pkg={{ item }} state=present update_cache=yes
