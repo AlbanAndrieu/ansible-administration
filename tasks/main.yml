@@ -52,7 +52,6 @@
 #   - autofs
    - ufw
 
-# ptxidns01/nissrv01 is dns for france.effix.fr and nis for france.effix.fr
 #- name: Configure domain file
 #  sudo: yes
 #  template: src=defaultdomain-{{ ansible_distribution }}-{{ ansible_architecture}}.j2 dest=/etc/defaultdomain
@@ -155,5 +154,5 @@
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: configure
 
-#copy current user key
+#copy current user key to root
 - include: copy-keys.yml
