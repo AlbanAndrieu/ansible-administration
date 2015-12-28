@@ -117,7 +117,7 @@ do_start ()
  if [ "$NISSERVER" != "false" ]
  then
   log_progress_msg "ypserv"
-  start-stop-daemon --start --quiet \
+  /sbin/start-stop-daemon --start --quiet \
    --pidfile /var/run/ypserv.pid --exec ${NET}/ypserv \
    -- ${YPSERVARGS}
  fi
@@ -141,10 +141,10 @@ do_start ()
   if [ "$YPPWDDIR" != "" ]; then
    YPPWDDIRARGS="-D ${YPPWDDIR}"
   fi
-  start-stop-daemon --start --quiet \
+  /sbin/start-stop-daemon --start --quiet \
    --exec ${NET}/rpc.yppasswdd -- $YPPWDDIRARGS $E $YPPASSWDDARGS
   log_progress_msg "ypxfrd"
-  start-stop-daemon --start --quiet \
+  /sbin/start-stop-daemon --start --quiet \
    --exec ${NET}/rpc.ypxfrd -- $YPXFRDARGS
  fi
  if egrep -q '^(ypserver|domain)' /etc/yp.conf
@@ -156,7 +156,7 @@ do_start ()
  if want_ypbind
  then
   log_progress_msg "ypbind"
-  start-stop-daemon -b --start --quiet \
+  /sbin/start-stop-daemon -b --start --quiet \
    --exec ${NET}/ypbind -- $broadcast ${YPBINDARGS}
   bind_wait
  fi
@@ -170,16 +170,16 @@ do_start ()
 do_stop () {
  log_daemon_msg "Stopping NIS services"
  log_progress_msg "ypbind"
- start-stop-daemon --stop --quiet --oknodo \
+ /sbin/start-stop-daemon --stop --quiet --oknodo \
   --pidfile /var/run/ypbind.pid
  log_progress_msg "ypserv"
- start-stop-daemon --stop --quiet --oknodo \
+ /sbin/start-stop-daemon --stop --quiet --oknodo \
   --pidfile /var/run/ypserv.pid
  log_progress_msg "ypppasswdd"
- start-stop-daemon --stop --quiet --oknodo \
+ /sbin/start-stop-daemon --stop --quiet --oknodo \
   --pidfile /var/run/yppasswdd.pid
  log_progress_msg "ypxfrd"
- start-stop-daemon --stop --quiet --oknodo \
+ /sbin/start-stop-daemon --stop --quiet --oknodo \
   --name rpc.ypxfrd
  log_end_msg 0
 }
@@ -200,7 +200,7 @@ case "$1" in
  do_stop
  ;;
   reload|force-reload)
- start-stop-daemon --stop --quiet --oknodo --signal 1 \
+ /sbin/start-stop-daemon --stop --quiet --oknodo --signal 1 \
   --pidfile /var/run/ypserv.pid --exec ${NET}/ypserv
  ;;
   restart)
