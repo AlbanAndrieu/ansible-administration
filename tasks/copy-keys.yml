@@ -1,5 +1,11 @@
 ---
+
+- name: Creates destination directory
+  # Workaround for #2372
+  file: state=directory mode=0700 dest=/root/.ssh/
+  
 - name: administration | Add passwordless connection for root users
   authorized_key: user={{ root_user }} key="{{ item }}"
-  sudo: yes
-  with_items: root_ssh_authorized_keys_fingerprints
+  become: yes
+  with_items: "{{root_ssh_authorized_keys_fingerprints}}"
+  when: root_ssh_authorized_keys_fingerprints | length > 0   

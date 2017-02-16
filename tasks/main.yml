@@ -15,13 +15,13 @@
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
   become: yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and apt_install_multiverse_repositories
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['16.04']) and apt_install_multiverse_repositories
   with_items: apt_multiverse_repositories
 
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
   become: yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and apt_install_multiverse_repositories
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['16.04']) and apt_install_multiverse_repositories
   with_items: apt_multiverse_repositories
 
 - name: administration | Install AWS tools
