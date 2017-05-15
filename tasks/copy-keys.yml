@@ -3,7 +3,8 @@
 - name: Creates destination directory
   # Workaround for #2372
   file: state=directory mode=0700 dest=/root/.ssh/
-  
+  become: yes
+    
 - name: administration | Add passwordless connection for root users
   authorized_key: user={{ root_user }} key="{{ item }}"
   become: yes
