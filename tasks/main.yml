@@ -42,6 +42,23 @@
    - daemon
    - mailutils
 
+- name: administration | Install raid tools
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
+  become: yes
+  tags: package
+  with_items:
+   - mdadm 
+   - dmraid   
+   - pciutils
+   
+- name: administration | Install hardwar list tools
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
+  become: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+  tags: package
+  with_items:
+   - lshw   
+   
 - name: administration | Install connection tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
   become: yes
