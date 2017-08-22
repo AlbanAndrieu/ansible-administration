@@ -1,0 +1,4 @@
+---
+root_home: "/var/root/"
+root_user: "root"
+root_group: "wheel"

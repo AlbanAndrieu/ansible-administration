@@ -1,0 +1,4 @@
+---
+root_home: "/root"
+root_user: "root"
+root_group: "root"
