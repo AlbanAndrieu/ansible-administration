@@ -52,10 +52,10 @@ script:
   #- echo localhost > hosts
 
   # Check syntax
-  - sudo ansible-playbook -i hosts --syntax-check administration.yml
+  - sudo ansible-playbook -i hosts --syntax-check administration.yml -e "python_versions=[2.7]"
 
   # First run
-  - sudo ansible-playbook -i hosts --connection=local --sudo -vvvv administration.yml
+  - sudo ansible-playbook -i hosts --connection=local --sudo -vvvv administration.yml -e "python_versions=[2.7]"
 
   #- coverage run --source=yourpackagename setup.py test
   
