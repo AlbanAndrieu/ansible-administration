@@ -25,6 +25,7 @@
   tags: package
   with_items:
    - smartmontools
+  become: yes
 
 - name: administration | Install monitoring tools
   action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -32,18 +33,19 @@
   tags: package
   with_items:
    - ssmtp
+  become: yes
 
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
-  become: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
   with_items: apt_multiverse_repositories
+  become: yes
 
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
-  become: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
   with_items: apt_multiverse_repositories
+  become: yes
 
 - name: administration | Install AWS tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"  
@@ -121,14 +123,16 @@
 #TODO see also ntp role
 - name: administration | Configure ntp file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
-  become: yes
+  when: (ansible_os_family != "Darwin")
   tags: configure
   notify: restart ntp
+  become: yes
 
 - name: administration | Start the ntp service
   service: name=ntp state=started enabled=true
-  become: yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
+  become: yes
 
 #- name: administration | Install nis
 #  apt: pkg=nis state=present
@@ -221,9 +225,9 @@
 
 - name: administration | Copy the sendmail configuration file
   template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
-  become: yes
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: configure
+  become: yes
 
 #copy current user key to root
 - import_tasks: copy-keys.yml
