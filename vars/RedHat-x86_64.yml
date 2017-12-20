@@ -2,3 +2,10 @@
 root_home: "/root"
 root_user: "root"
 root_group: "root"
+
+rhel_subscription_username: ""
+rhel_subscription_password: ""
+
+automountPrefix: auto.
+mountOptions: "-intr,soft,rsize=65536,wsize=65536"
+autodirectNosuid: ",nosuid"

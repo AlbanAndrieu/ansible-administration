@@ -1,0 +1,8 @@
+---
+root_home: "/root"
+root_user: "root"
+root_group: "root"
+
+automountPrefix: auto_
+mountOptions: "-intr,hard,vers=3,rsize=65536,wsize=65536"
+autodirectNosuid: ",nosuid"

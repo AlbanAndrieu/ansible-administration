@@ -1,0 +1,10 @@
+  
+- name: Register and auto-subscribe to available content (RHSM)
+  redhat_subscription: 
+    state         : present 
+    username      : "{{rhel_subscription_username}}"
+    password      : "{{rhel_subscription_password}}"
+    autosubscribe : yes 
+  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username | length > 0
+  become: yes
+  become_user: root
