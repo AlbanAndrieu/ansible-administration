@@ -1,0 +1,4 @@
+# HP Management Component Pack
+deb http://downloads.linux.HPE.com/SDR/repo/mcp trusty/current non-free
+deb http://downloads.linux.HPE.com/SDR/repo/mcp precise/current non-free
+deb http://downloads.linux.HPE.com/SDR/repo/mcp xenial/current non-free

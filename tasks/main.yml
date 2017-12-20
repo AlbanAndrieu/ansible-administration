@@ -9,7 +9,11 @@
 
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_distribution }}-{{ ansible_architecture }}.yml"
-  
+
+- import_tasks: hpe.yml
+
+- import_tasks: dell.yml
+
 - name: administration | Install monitoring tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
