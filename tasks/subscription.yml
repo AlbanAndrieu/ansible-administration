@@ -1,4 +1,11 @@
-  
+
+#https://docs.ansible.com/ansible/redhat_subscription_module.html
+
+- name: Clean wrong repo
+  command: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
+  become: yes
+  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+
 - name: Register and auto-subscribe to available content (RHSM)
   redhat_subscription: 
     state         : present 
@@ -8,3 +15,5 @@
   when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username | length > 0
   become: yes
   become_user: root
+
+#subscription-manager list

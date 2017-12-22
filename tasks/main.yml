@@ -10,6 +10,15 @@
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_distribution }}-{{ ansible_architecture }}.yml"
 
+#- import_tasks: subscription.yml
+
+- name: administration | Disabled SELinux
+  selinux: state=disabled
+  when: not selinux_enabled
+
+- meta: flush_handlers
+  when: not selinux_enabled
+  
 - import_tasks: hpe.yml
 
 - import_tasks: dell.yml
@@ -59,6 +68,7 @@
    - ec2-api-tools
    - s3cmd
   become: yes
+  ignore_errors: yes
 
 - name: administration | Install other tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -137,8 +147,7 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
   become: yes
-
-#- import_tasks: automount.yml
+  ignore_errors: yes
 
 - name: administration | Install sendmail tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -154,6 +163,8 @@
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: configure
   become: yes
+
+#- import_tasks: automount.yml
 
 #copy current user key to root
 - import_tasks: copy-keys.yml
