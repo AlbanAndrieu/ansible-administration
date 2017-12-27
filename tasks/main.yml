@@ -12,13 +12,8 @@
 
 #- import_tasks: subscription.yml
 
-- name: administration | Disabled SELinux
-  selinux: state=disabled
-  when: not selinux_enabled
+- import_tasks: selinux.yml
 
-- meta: flush_handlers
-  when: not selinux_enabled
-  
 - import_tasks: hpe.yml
 
 - import_tasks: dell.yml
