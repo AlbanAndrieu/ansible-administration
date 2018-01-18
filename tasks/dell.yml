@@ -2,7 +2,7 @@
 - name: DLL | Install Dell rpms
   command: "yum -q -y -e 0 install {{ item }}"
   with_items:
-  - '{{ dellRepo }}/perccli-1.11.03-1.noarch.rpm'
+   - 'http://storage-repo.acronis.com/vstorage/releases/2.1/x86_64/os/Packages/p/perccli-1.11.03-1.noarch.rpm'
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_system_vendor == 'Dell Inc.'
   ignore_errors: true
   tags: vendors
