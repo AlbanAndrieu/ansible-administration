@@ -1,10 +1,11 @@
-#ubuntu
+
 ntpservers:
   - "ntp.ubuntu.com"
   - "timehost"
 
 nisserver: albandri
 mailserver: smtp.gmail.com
+defaultdomain: nabla.mobi
 
 apt_install_multiverse_repositories: yes  # Install some repositories (see list bellow)
 apt_multiverse_repositories: ["http://us.archive.ubuntu.com/ubuntu/"]          # List of sources which be added
@@ -19,3 +20,8 @@ root_user: "root"
 root_group: "root"
 
 selinux_enabled: no
+automount_enabled: no
+nis_enabled: yes
+autofs_enabled: yes
+
+mountpoints: {}

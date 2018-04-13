@@ -2,3 +2,7 @@
 root_home: "/root"
 root_user: "root"
 root_group: "root"
+
+automountPrefix: auto.
+mountOptions: "-intr,soft,rsize=65536,wsize=65536"
+autodirectNosuid: ",nosuid"

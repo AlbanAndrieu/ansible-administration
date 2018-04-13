@@ -10,8 +10,9 @@
   
 - name: administration | Disabled SELinux
   selinux: state=disabled
-  when: not selinux_enabled
+  when: not selinux_enabled and not ansible_check_mode
   become: yes
+  ignore_errors: true
 
 - meta: flush_handlers
   when: not selinux_enabled

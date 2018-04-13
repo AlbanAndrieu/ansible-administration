@@ -1,0 +1,41 @@
+
+#Allow
+#sudo mkdir -p /tpref
+#sudo mount fr1svmnas12-nfs:/fr1svmnas12_multi_buildmst_b01/q_thirdparty-reference /tpref
+
+# ptxidns01/nissrv01 is dns for france.effix.fr and nis for france.effix.fr
+- name: administration | Configure domain file
+  template: src=defaultdomain-{{ ansible_distribution }}-{{ ansible_architecture}}.j2 dest=/etc/defaultdomain
+  tags: configure
+  become: yes  
+
+- name: administration | Install nis
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  with_items:
+   - nis  
+  become: yes
+  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
+  tags: package
+
+- name: administration | Configure yellow page file
+  become: yes
+  template: src=yp.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/yp.conf
+  tags: configure
+  notify: restart nis
+
+- name: administration | Configure nis file
+  become: yes
+  template: src=nsswitch.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/nsswitch.conf
+  tags: configure
+  notify: restart nis
+
+- name: administration | Copy the nis init script
+  copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
+  become: yes
+  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and ( ansible_distribution_release == 'precise' )
+  tags: configure
+
+#- name: administration | Start the nis service
+#  become: yes
+#  service: name=nis state=started enabled=true
+#  tags: service

@@ -92,8 +92,16 @@
    - dmraid   
    - pciutils
   become: yes
+   
+- name: administration | Install connection tools
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  tags: package
+  with_items:
+   - ufw
+  become: yes
 
-- name: administration | Install hardwar list tools
+- name: administration | Install hardware list tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   become: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
@@ -101,35 +109,18 @@
   with_items:
    - lshw   
   become: yes
-   
-- name: administration | Install connection tools
+
+- import_tasks: automount.yml
+  when: automount_enabled
+  
+- name: administration | Install ntp
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
-#   - nis
-   - ufw
+   - ntp
   become: yes
 
-#- name: Configure domain file
-#  become: yes
-#  template: src=defaultdomain-{{ ansible_distribution }}-{{ ansible_architecture}}.j2 dest=/etc/defaultdomain
-#  tags: configure
-
-# NTP below is installed by the ntp ansible role
-#- name: Install ntp
-#  yum: name=ntp state=present
-#  become: yes
-#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
-#  tags: package
-#
-#- name: Install ntp
-#  apt: pkg=ntp state=present update_cache=yes
-#  become: yes
-#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-#  tags: package
-
-#TODO see also ntp role
 - name: administration | Configure ntp file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   when: (ansible_os_family != "Darwin")
@@ -143,6 +134,11 @@
   tags: service
   become: yes
   ignore_errors: yes
+
+#- name: administration | Start the ntp service
+#  service: name=ntpd state=started enabled=true
+#  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+#  tags: service
 
 - name: administration | Install sendmail tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -159,7 +155,31 @@
   tags: configure
   become: yes
 
-#- import_tasks: automount.yml
+- name: administration | Copy the sendmail configuration file
+  template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
+  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
+  tags: configure
+  become: yes
 
 #copy current user key to root
 - import_tasks: copy-keys.yml
+
+- name: administration | Required by zabbix ansible role
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  tags: package
+  with_items:
+   - policycoreutils-python
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  changed_when: false
+  become: yes
+  ignore_errors: true
+
+- name: administration | Required by zabbix ansible role
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  tags: package
+  with_items:
+   - policycoreutils
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  changed_when: false
+  become: yes
+  ignore_errors: true

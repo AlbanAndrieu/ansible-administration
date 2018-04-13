@@ -1,0 +1,49 @@
+
+- name: administration | Install automount packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  with_items:
+    - autofs
+    - autofs5
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  tags: package
+  become: yes
+
+- name: administration | Install automount packages
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  with_items:
+  - autofs
+  - nfs-utils
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
+  tags: package
+  become: yes
+
+- name: administration | Set automount mountpoints
+  lineinfile: dest=/etc/{{automountPrefix}}direct create=yes regexp="^{{item.key}}\s" line="{{item.key}}    {{mountOptions}}    {{item.value}}"
+  with_dict: "{{mountpoints}}"
+  notify: restart autofs
+
+- name: administration | Update auto.master
+  lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="/net\s+-hosts" line="/net    -hosts"
+  notify: restart autofs
+
+- name: administration | Update auto.master
+  lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="^/-\s" line="/-    /etc/{{automountPrefix}}direct    -intr{{autodirectNosuid}},timeo=100"
+  notify: restart autofs
+
+#- name: administration | Configure autofs file
+#  become: yes
+#  template: src=auto.master-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.master
+#  tags: autofs
+#  notify: restart autofs
+  
+- name: administration | Configure autofs file
+  become: yes
+  template: src=rc.local-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/rc.local
+  tags: configure
+  notify: restart autofs
+  
+#- name: administration | Configure autofs file
+#  become: yes
+#  template: src=autofs_ldap_auth.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/autofs_ldap_auth.conf
+#  tags: configure
+#  notify: restart autofs
