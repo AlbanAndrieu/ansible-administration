@@ -1,9 +1,9 @@
-
-#Below fix perccli64 is not installed
+---
+# Below fix perccli64 is not installed
 - name: DLL | Install Dell perccli rpms
   command: "yum -q -y -e 0 install {{ item }}"
   with_items:
-   - 'http://storage-repo.acronis.com/vstorage/releases/2.1/x86_64/os/Packages/p/perccli-1.11.03-1.noarch.rpm'
+    - 'http://storage-repo.acronis.com/vstorage/releases/2.1/x86_64/os/Packages/p/perccli-1.11.03-1.noarch.rpm'
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and (ansible_system_vendor == 'Dell Inc.' or ansible_system_vendor == 'VMware, Inc.')
   ignore_errors: true
   tags: vendors
@@ -12,48 +12,48 @@
   command: /opt/MegaRAID/perccli/perccli64 --version
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and (ansible_system_vendor == 'Dell Inc.' or ansible_system_vendor == 'VMware, Inc.')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true
 
-#TODO add https://raid.wiki.kernel.org/index.php/Hardware_Raid_Setup_using_MegaCli on Ubuntu
+# TODO add https://raid.wiki.kernel.org/index.php/Hardware_Raid_Setup_using_MegaCli on Ubuntu
 
-#apt-get install megacli
+# apt-get install megacli
 - name: DLL | Install Dell rpms
   command: "yum -q -y -e 0 install {{ item }}"
   with_items:
-   - 'http://dl.marmotte.net/rpms/redhat/el7/x86_64/megacli-8.00.46-2/megacli-8.00.46-2.x86_64.rpm'
+    - 'http://dl.marmotte.net/rpms/redhat/el7/x86_64/megacli-8.00.46-2/megacli-8.00.46-2.x86_64.rpm'
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and (ansible_system_vendor == 'Dell Inc.' or ansible_system_vendor == 'VMware, Inc.')
   ignore_errors: true
   tags: vendors
 
-#locate megacli
+# locate megacli
 
 - name: DLL | Check megacli properly installed
   command: MegaCli -v
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and (ansible_system_vendor == 'Dell Inc.' or ansible_system_vendor == 'VMware, Inc.')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true
 
-#MegaCli -LDInfo -Lall -aALL
+# MegaCli -LDInfo -Lall -aALL
 
 - name: DLL | Install iscsiadm package
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
   tags: package
   with_items:
-   - iscsi-initiator-utils
+    - iscsi-initiator-utils
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true
 
 - name: DLL | Install iscsiadm package
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
   tags: package
   with_items:
-   - open-iscsi
+    - open-iscsi
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true
   

@@ -116,7 +116,7 @@ EOU
           #Architecture="x86_64"  # collapse to a single namespace
           Architecture="$my_value"
           ;;
-        *) 
+        *)
           MSG_TYPE="ERROR" && MSG="unknown architecture : $my_value"
           echo "$MSG_TYPE - $MSG !!" 1>&2
           exit 1

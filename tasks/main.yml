@@ -4,13 +4,13 @@
 - name: Assert platform is supported
   assert:
     that:
-      - ansible_os_family in ['Debian', 'RedHat', 'Windows','Solaris','Darwin']
+      - ansible_os_family in ['Debian', 'RedHat', 'Windows', 'Solaris', 'Darwin']
       - ansible_architecture in ['x86_64']
 
 - name: Include OS-specific variables.
   include_vars: "{{ ansible_distribution }}-{{ ansible_architecture }}.yml"
 
-#- import_tasks: subscription.yml
+# - import_tasks: subscription.yml
 
 - import_tasks: selinux.yml
 
@@ -23,47 +23,47 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
   with_items:
-   - snmp #for cacti
-   - snmpd #for cacti
-  become: yes
+    - snmp    # for cacti
+    - snmpd   # for cacti
+  become: true
 
 - name: administration | Install monitoring tools
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
    - smartmontools
-  become: yes
+  become: true
 
 - name: administration | Install monitoring tools
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
    - ssmtp
-  become: yes
+  become: true
 
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
-  with_items: apt_multiverse_repositories
-  become: yes
+  with_items: '{{apt_multiverse_repositories}}'
+  become: true
 
 - name: administration | Make sure multiverse is enabled for AWS tools
   apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
-  with_items: apt_multiverse_repositories
-  become: yes
+  with_items: '{{apt_multiverse_repositories}}'
+  become: true
 
 - name: administration | Install AWS tools
-  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"  
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['12.04'])
   tags: package
   with_items:
    - ec2-api-tools
    - s3cmd
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
 
 - name: administration | Install other tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -72,16 +72,16 @@
   with_items:
    - daemon
    - mailutils
-  become: yes
+  become: true
 
 - name: administration | Install connection nfs client tools
-  action: "{{ ansible_pkg_mgr}} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version not in ['12.04', '14.04'])
   tags: package
   with_items:
    - rpcbind
    - nfs-common
-  become: yes
+  become: true
 
 - name: administration | Install raid tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -91,7 +91,7 @@
    - mdadm 
    - dmraid   
    - pciutils
-  become: yes
+  become: true
    
 - name: administration | Install connection tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -99,7 +99,7 @@
   tags: package
   with_items:
    - ufw
-  become: yes
+  become: true
 
 - name: administration | Install hardware list tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -108,7 +108,7 @@
   tags: package
   with_items:
    - lshw   
-  become: yes
+  become: true
 
 - import_tasks: automount.yml
   when: automount_enabled
@@ -119,26 +119,26 @@
   tags: package
   with_items:
    - ntp
-  become: yes
+  become: true
 
 - name: administration | Configure ntp file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   when: (ansible_os_family != "Darwin")
   tags: configure
   notify: restart ntp
-  become: yes
+  become: true
 
 - name: administration | Start the ntp service
   service: name=ntp state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: service
-  become: yes
-  ignore_errors: yes
+  become: true
+  ignore_errors: true
 
-#- name: administration | Start the ntp service
-#  service: name=ntpd state=started enabled=true
-#  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
-#  tags: service
+# - name: administration | Start the ntp service
+#   service: name=ntpd state=started enabled=true
+#   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+#   tags: service
 
 - name: administration | Install sendmail tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -146,22 +146,16 @@
   tags: package
   with_items:
    - sendmail
-  become: yes
+  become: true
   changed_when: false
 
 - name: administration | Copy the sendmail configuration file
   template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: configure
-  become: yes
+  become: true
 
-- name: administration | Copy the sendmail configuration file
-  template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
-  when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
-  tags: configure
-  become: yes
-
-#copy current user key to root
+# Copy current user key to root
 - import_tasks: copy-keys.yml
 
 - name: administration | Required by zabbix ansible role
@@ -171,7 +165,7 @@
    - policycoreutils-python
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true
 
 - name: administration | Required by zabbix ansible role
@@ -181,5 +175,5 @@
    - policycoreutils
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   changed_when: false
-  become: yes
+  become: true
   ignore_errors: true

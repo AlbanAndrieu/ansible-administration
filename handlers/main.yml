@@ -3,26 +3,41 @@
 # See http://ansible.cc/docs/playbooks.html for more information about handlers.
 
 - name: restart ntp
-  service: name=ntpd state=restarted
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
-  become: yes
+  systemd:
+    state: restarted
+    daemon_reload: true
+    name: ntpd
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  become: true
   
 - name: restart ntp
-  service: name=ntp state=restarted
+  systemd:
+    state: restarted
+    daemon_reload: true
+    name: ntpd
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  become: yes
+  become: true
 
 - name: restart nis
-  service: name=nis state=restarted
-  become: yes
+  systemd:
+    state: restarted
+    daemon_reload: true
+    name: nis
+  become: true
 
 - name: restart yp
-  service: name=ypbind state=restarted
-  become: yes
+  systemd:
+    state: restarted
+    daemon_reload: true
+    name: ypbind
+  become: true
       
 - name: restart autofs
-  service: name=autofs state=restarted
-  become: yes      
-      
+  systemd:
+    state: restarted
+    daemon_reload: true
+    name: autofs
+  become: true
+
 #- name: restart iptables
 #  service: name=iptables state=restarted

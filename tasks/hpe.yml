@@ -1,7 +1,8 @@
+---
   
-#sh ./add_repo.sh -h
-#sudo sh ./add_repo.sh mcp
-#rm -Rf /etc/apt/sources.list.d/HP-mcp.list
+# sh ./add_repo.sh -h
+# sudo sh ./add_repo.sh mcp
+# rm -Rf /etc/apt/sources.list.d/HP-mcp.list
 
 - name: HPE | Install HP repository
   copy: src=hp.list dest=/etc/apt/sources.list.d/ owner=root group=root mode=0440
@@ -10,10 +11,10 @@
 - name: HPE | Add HP repository key
   apt_key: url={{ item }} state=present
   with_items:
-  - http://downloads.linux.hpe.com/SDR/hpPublicKey1024.pub
-  - http://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub
-  - http://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub
-  - http://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub
+    - http://downloads.linux.hpe.com/SDR/hpPublicKey1024.pub
+    - http://downloads.linux.hpe.com/SDR/hpPublicKey2048.pub
+    - http://downloads.linux.hpe.com/SDR/hpPublicKey2048_key1.pub
+    - http://downloads.linux.hpe.com/SDR/hpePublicKey2048_key1.pub
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_system_vendor == 'HP'
 
 - name: HPE | Install HP tools on HP servers
@@ -23,9 +24,8 @@
 - name: HPE | Install HP rpms
   command: "yum -q -y -e 0 install {{ item }}"
   with_items:
-   - 'https://downloads.linux.hpe.com/SDR/repo/mcp/centos/6/x86_64/9.50//hpacucli-9.40-12.0.x86_64.rpm'
+    - 'https://downloads.linux.hpe.com/SDR/repo/mcp/centos/6/x86_64/9.50//hpacucli-9.40-12.0.x86_64.rpm'
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and ansible_system_vendor == 'HP'
-#  ignore_errors: true
   tags: vendors
 
-#TODO check apt-key list 
+# TODO check apt-key list

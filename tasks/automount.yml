@@ -1,4 +1,4 @@
-
+---
 - import_tasks: nis.yml
   when: nis_enabled
 
@@ -12,15 +12,16 @@
   - nfslock
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
   tags: service
-  become: yes
+  become: true
 
 - name: administration | Start the autofs service
   service: name=autofs state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
   tags: service
-  become: yes
+  become: true
 
 - meta: flush_handlers
 
-- pause: 
+- pause:
     seconds: 30
+  when: (autofs_enabled or nis_enabled)

@@ -1,23 +1,32 @@
 ---
 language: python
 python:
-  - 2.7
+#  - 2.7
 #  - 3.3
 #  - 3.4
 #  - 3.5
+  - 3.6
+
+services:
+  - docker
+    
 cache:
+  bundler:
   directories:
     - $HOME/.cache/pip
 env:
 #  - ANSIBLE_VERSION=latest
   - ANSIBLE_VERSION=2.4.1.0
 #  - ANSIBLE_VERSION=2.3.1.0
-#  - ANSIBLE_VERSION=2.2.2.0  
-cache: bundler
+#  - ANSIBLE_VERSION=2.2.2.0
+
 #sudo: false
 sudo: required
 dist: trusty
 
+virtualenv:
+  system_site_packages: false
+  
 branches:
   only:
     - master
@@ -33,14 +42,13 @@ before_install:
   # now install from it
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels scipy
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels cython
-  - pip install coveralls  
+  - pip install coveralls
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
-  # Add ansible.cfg to pick up roles path.
-  #- "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  - pip install molecule
 
   # Install dependencies.
   #- ansible-galaxy install alban.andrieu.subversion
@@ -57,26 +65,24 @@ install:
 script:
   # Check ansible version
   - ansible --version
-  #- export ANSIBLE_ROLES_PATH="../"
-
-  # Prepare tests
-  #- echo localhost > hosts
-
+  
   # Check syntax
   - ansible-playbook -i hosts --syntax-check administration.yml -e "python_versions=[2.7]"
 
+  # Molecule test
+  # - molecule test
+  
   # First run
   - ansible-playbook -i hosts --connection=local --sudo -vvvv administration.yml -e "python_versions=[2.7]"
 
   #- coverage run --source=yourpackagename setup.py test
-  
+
 after_success:
   - coveralls
 
 notifications:
   email:
     recipients:
-      - alban.andrieu@nabla.mobi
-#      - other@example.com
+      - alban.andrieu@free.fr
     on_success: [always|never|change] # default: change
     on_failure: [always|never|change] # default: always

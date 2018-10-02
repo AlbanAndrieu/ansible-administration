@@ -1,3 +1,4 @@
+---
 
 ntpservers:
   - "ntp.ubuntu.com"
@@ -7,21 +8,21 @@ nisserver: albandri
 mailserver: smtp.gmail.com
 defaultdomain: nabla.mobi
 
-apt_install_multiverse_repositories: yes  # Install some repositories (see list bellow)
+apt_install_multiverse_repositories: true  # Install some repositories (see list bellow)
 apt_multiverse_repositories: ["http://us.archive.ubuntu.com/ubuntu/"]          # List of sources which be added
 
-root_ssh_authorized_keys_enabled: yes
+root_ssh_authorized_keys_enabled: true
 root_ssh_authorized_keys_fingerprints:
-# Alban Andrieu
- - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"
+#  Alban Andrieu
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEAio3SOQ9yeK6QfKqSFNKyTasuzjStxWevG1Vz1wgJIxPF+KB0XoMAPD081J+Bzj2LCDRSWisNv2L4xv2jbFxW/Pl7NEakoX47eNx3U+Dxaf+szeWBTryYcDUGkduLV7G8Qncm0luIFd+HDIe/Qir1E2f56Qu2uuBNE6Tz5TFt1vc= Alban"
 
 root_home: "/root"
 root_user: "root"
 root_group: "root"
 
-selinux_enabled: no
-automount_enabled: no
-nis_enabled: yes
-autofs_enabled: yes
+selinux_enabled: false
+automount_enabled: false
+nis_enabled: true
+autofs_enabled: true
 
 mountpoints: {}
