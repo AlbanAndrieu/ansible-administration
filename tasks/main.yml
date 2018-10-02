@@ -32,7 +32,7 @@
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
-   - smartmontools
+    - smartmontools
   become: true
 
 - name: administration | Install monitoring tools
@@ -40,7 +40,7 @@
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
-   - ssmtp
+    - ssmtp
   become: true
 
 - name: administration | Make sure multiverse is enabled for AWS tools
@@ -60,8 +60,8 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['12.04'])
   tags: package
   with_items:
-   - ec2-api-tools
-   - s3cmd
+    - ec2-api-tools
+    - s3cmd
   become: true
   ignore_errors: true
 
@@ -70,8 +70,8 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
   with_items:
-   - daemon
-   - mailutils
+    - daemon
+    - mailutils
   become: true
 
 - name: administration | Install connection nfs client tools
@@ -79,8 +79,8 @@
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version not in ['12.04', '14.04'])
   tags: package
   with_items:
-   - rpcbind
-   - nfs-common
+    - rpcbind
+    - nfs-common
   become: true
 
 - name: administration | Install raid tools
@@ -88,37 +88,36 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
   with_items:
-   - mdadm 
-   - dmraid   
-   - pciutils
+    - mdadm
+    - dmraid
+    - pciutils
   become: true
-   
+
 - name: administration | Install connection tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
   with_items:
-   - ufw
+    - ufw
   become: true
 
 - name: administration | Install hardware list tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
-  become: yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   tags: package
   with_items:
-   - lshw   
+    - lshw
   become: true
 
 - import_tasks: automount.yml
   when: automount_enabled
-  
+
 - name: administration | Install ntp
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
-   - ntp
+    - ntp
   become: true
 
 - name: administration | Configure ntp file
@@ -145,7 +144,7 @@
   when: (ansible_os_family != "Darwin")
   tags: package
   with_items:
-   - sendmail
+    - sendmail
   become: true
   changed_when: false
 
@@ -162,7 +161,7 @@
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
   tags: package
   with_items:
-   - policycoreutils-python
+    - policycoreutils-python
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
   changed_when: false
   become: true
@@ -172,7 +171,7 @@
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
   tags: package
   with_items:
-   - policycoreutils
+    - policycoreutils
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   changed_when: false
   become: true

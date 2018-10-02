@@ -1,5 +1,5 @@
 ---
-  
+
 # sh ./add_repo.sh -h
 # sudo sh ./add_repo.sh mcp
 # rm -Rf /etc/apt/sources.list.d/HP-mcp.list
@@ -20,7 +20,7 @@
 - name: HPE | Install HP tools on HP servers
   apt: name=hpacucli state=latest update_cache=yes
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ansible_system_vendor == 'HP'
-  
+
 - name: HPE | Install HP rpms
   command: "yum -q -y -e 0 install {{ item }}"
   with_items:

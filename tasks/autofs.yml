@@ -12,8 +12,8 @@
 - name: administration | Install automount packages
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   with_items:
-  - autofs
-  - nfs-utils
+    - autofs
+    - nfs-utils
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
   tags: package
   become: true
@@ -36,13 +36,13 @@
 #   template: src=auto.master-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.master
 #   tags: autofs
 #   notify: restart autofs
-  
+
 - name: administration | Configure autofs file
   template: src=rc.local-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/rc.local
   tags: configure
   notify: restart autofs
   become: true
-  
+
 # - name: administration | Configure autofs file
 #   become: true
 #   template: src=autofs_ldap_auth.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/autofs_ldap_auth.conf

@@ -8,7 +8,7 @@
    - python-selinux
    - selinux-policy-default
   become: true
-  
+
 - name: administration | Disabled SELinux
   selinux: state=disabled
   when: not selinux_enabled and not ansible_check_mode

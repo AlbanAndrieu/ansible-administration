@@ -4,7 +4,7 @@
   # Workaround for #2372
   file: state=directory mode=0700 dest={{root_home}}/.ssh/ owner="{{root_user}}" group="{{root_group}}"
   become: true
-    
+
 - name: Add passwordless connection for root users
   authorized_key: user={{ root_user }} key="{{ item }}"
   with_items: "{{root_ssh_authorized_keys_fingerprints}}"

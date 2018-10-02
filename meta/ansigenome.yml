@@ -12,27 +12,27 @@ galaxy_info:
   license: Apache
   min_ansible_version: 2.3.1.0
   platforms:
-  - name: Ubuntu
-    versions:
-    - all
-    - lucid
-    - maverick
-    - natty
-    - oneiric
-    - precise
-    - quantal
-    - raring
-    - saucy
-    - trusty
+    - name: Ubuntu
+      versions:
+        - all
+        - lucid
+        - maverick
+        - natty
+        - oneiric
+        - precise
+        - quantal
+        - raring
+        - saucy
+        - trusty
   categories:
-  - development
+    - development
 
 ansigenome_info:
   galaxy_id: ''
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'administration'
 
-  travis: False
+  travis: false
 
   synopsis: |
     Describe your role in a few paragraphs....
@@ -40,5 +40,5 @@ ansigenome_info:
   usage: |
     Describe how to use in more detail...
 
-  #custom: |
-  #  Any custom output you want after the usage section..
+  # custom: |
+  #   Any custom output you want after the usage section..
