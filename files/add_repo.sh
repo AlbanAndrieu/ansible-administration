@@ -160,7 +160,7 @@ EOU
 
       # denote best guess
       [ -n "$Release" ] && {
-        MSG_TYPE="note" && MSG="determined release : $Release"        
+        MSG_TYPE="note" && MSG="determined release : $Release"
         [ -n "$VERBOSE" ] && echo "$MSG_TYPE : $MSG"
       }
 
@@ -317,12 +317,12 @@ EOU
 
     while [ "$1" != "--" ]; do
       case "$1" in
-        -a) MSG_TYPE="note" && MSG="override Linux architecture : $2"        
+        -a) MSG_TYPE="note" && MSG="override Linux architecture : $2"
             [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             my_Architecture="$2"
             shift 2
             ;;
-        -d) MSG_TYPE="note" && MSG="override Linux distribution : $2"        
+        -d) MSG_TYPE="note" && MSG="override Linux distribution : $2"
             [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             my_Distribution="$2"
             shift 2
@@ -343,10 +343,10 @@ EOU
             ;;
         -o) if [ -d "$2" ] ; then
               [ -w "$2" ] && my_OutputDirectory="$2"
-              MSG_TYPE="note" && MSG="override output directory : $2"        
+              MSG_TYPE="note" && MSG="override output directory : $2"
               [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             else
-              MSG_TYPE="ERROR" && MSG="cannot write to output directory : $2"        
+              MSG_TYPE="ERROR" && MSG="cannot write to output directory : $2"
               echo "$MSG_TYPE : $MSG !!" 1>&2
               show_usage
             fi
@@ -377,7 +377,7 @@ EOU
             my_Zyppconffile="$2"
             shift 2
             ;;
-        -u) MSG_TYPE="note" && MSG="override URL prefix : $2"        
+        -u) MSG_TYPE="note" && MSG="override URL prefix : $2"
             [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             my_URLPrefix="$2"
             shift 2
@@ -515,7 +515,7 @@ EOU
       Distribution="$my_Distribution"
     else
       [ -z "$Distribution" ] && {
-        MSG_TYPE="ERROR" && MSG="cannot determine distribution, please specify -d option"        
+        MSG_TYPE="ERROR" && MSG="cannot determine distribution, please specify -d option"
         echo "$MSG_TYPE $MSG !!" 1>&2
         show_usage
       }
@@ -528,7 +528,7 @@ EOU
       Release=$my_Release
     else
       [ -n "$Release" ] || {
-        MSG_TYPE="ERROR" && MSG="cannot determine release, please specify -r option"        
+        MSG_TYPE="ERROR" && MSG="cannot determine release, please specify -r option"
         echo "$MSG_TYPE $MSG !!" 1>&2
         show_usage
       }
@@ -541,7 +541,7 @@ EOU
       Architecture=$my_Architecture
     else
       [ -n "$Architecture" ] || {
-        MSG_TYPE="ERROR" && MSG="cannot determine architecture, please specify -a option"        
+        MSG_TYPE="ERROR" && MSG="cannot determine architecture, please specify -a option"
         echo "$MSG_TYPE $MSG !!" 1>&2
         show_usage
       }
@@ -597,7 +597,7 @@ EOU
               apt_template
             else
               [ -s "$my_output" ] && {
-                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"        
+                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"
                 echo "$MSG_TYPE : $MSG"
                 echo -n "okay to overwrite? (yes/no) "
                 read answer
@@ -606,7 +606,7 @@ EOU
                 esac
               }
               apt_template > $my_output || {
-                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"        
+                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"
                 echo "$MSG_TYPE $MSG !!" 1>&2
                 exit 1
               }
@@ -636,7 +636,7 @@ EOU
               zypp_template
             else
               [ -s "$my_output" ] && {
-                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"        
+                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"
                 echo "$MSG_TYPE : $MSG"
                 echo -n "okay to overwrite? (yes/no) "
                 read answer
@@ -645,7 +645,7 @@ EOU
                 esac
               }
               zypp_template > $my_output || {
-                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"        
+                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"
                 echo "$MSG_TYPE $MSG !!" 1>&2
                 exit 1
               }
@@ -657,7 +657,7 @@ EOU
               yum_template
             else
               [ -s "$my_output" ] && {
-                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"        
+                MSG_TYPE="warn" && MSG="about to overwrite configuration : $my_output"
                 echo "$MSG_TYPE : $MSG"
                 echo -n "okay to overwrite? (yes/no) "
                 read answer
@@ -666,7 +666,7 @@ EOU
                 esac
               }
               yum_template > $my_output || {
-                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"        
+                MSG_TYPE="ERROR" && MSG="cannot create configuration : $my_output"
                 echo "$MSG_TYPE $MSG !!" 1>&2
                 exit 1
               }

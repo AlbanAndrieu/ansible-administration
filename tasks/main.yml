@@ -72,6 +72,7 @@
   with_items:
     - daemon
     - mailutils
+#    - systemd-sysv
   become: true
 
 - name: administration | Install connection nfs client tools
@@ -79,7 +80,6 @@
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version not in ['12.04', '14.04'])
   tags: package
   with_items:
-    - rpcbind
     - nfs-common
   become: true
 

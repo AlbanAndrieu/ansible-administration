@@ -3,7 +3,7 @@
   become: true
 
   roles:
-    - role: administration
+    - role: ansible-administration
 
   vars:
     ntp_timezone: Europe/Paris

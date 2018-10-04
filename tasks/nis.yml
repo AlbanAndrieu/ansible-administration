@@ -5,35 +5,52 @@
 
 # ptxidns01/nissrv01 is dns for france.effix.fr and nis for france.effix.fr
 - name: administration | Configure domain file
-  template: src=defaultdomain-{{ ansible_distribution }}-{{ ansible_architecture}}.j2 dest=/etc/defaultdomain
+  template: src=defaultdomain.j2 dest=/etc/defaultdomain
   tags: configure
   become: true
 
-- name: administration | Install nis
+- name: administration | Install nis ypbind
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  tags: package
+  with_items:
+    - ypbind
+  become: true
+
+- name: administration | Install nis rpcbind
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
+  when: not (( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version in ['12.04', '14.04']))
+  tags: package
+  with_items:
+    - rpcbind
+  become: true
+
+- name: administration | Install nis ypbind
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   with_items:
-   - nis
+    - nis
   become: true
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
   tags: package
-
-- name: administration | Configure yellow page file
-  become: true
-  template: src=yp.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/yp.conf
-  tags: configure
-  notify: restart nis
-
-- name: administration | Configure nis file
-  become: true
-  template: src=nsswitch.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/nsswitch.conf
-  tags: configure
-  notify: restart nis
 
 - name: administration | Copy the nis init script
   copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
   become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ( ansible_distribution_release == 'precise' )
   tags: configure
+
+- name: administration | Configure yellow page file
+  become: true
+  template: src=yp.conf.j2 dest=/etc/yp.conf
+  tags: configure
+  notify: restart nis
+
+- name: administration | Configure nis file
+  become: true
+  template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
+  tags: configure
+#  notify: restart nis
+  notify: restart NetworkManager
 
 # - name: administration | Start the nis service
 #   become: true

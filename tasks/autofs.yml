@@ -32,19 +32,21 @@
   notify: restart autofs
 
 # - name: administration | Configure autofs file
-#   become: true
 #   template: src=auto.master-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.master
 #   tags: autofs
 #   notify: restart autofs
+#   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#   become: true
 
 - name: administration | Configure autofs file
-  template: src=rc.local-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/rc.local
+  template: src=rc.local-{{ ansible_distribution }}.j2 dest=/etc/rc.local
   tags: configure
   notify: restart autofs
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: true
 
 # - name: administration | Configure autofs file
-#   become: true
-#   template: src=autofs_ldap_auth.conf-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/autofs_ldap_auth.conf
+#   template: src=autofs_ldap_auth.conf.j2 dest=/etc/autofs_ldap_auth.conf
 #   tags: configure
 #   notify: restart autofs
+#   become: true

@@ -23,7 +23,7 @@ passwd: files nis
 shadow: files nis
 group: files nis
 
-hosts: files nabla mdns4_minimal dns [NOTFOUND=return] nis
+hosts: files kenvng mdns4_minimal dns [NOTFOUND=return] nis
 
 bootparams: nisplus [NOTFOUND=return] files
 
@@ -32,7 +32,7 @@ netmasks: db files
 networks: db files
 protocols: db files
 rpc: db files
-services: db files nabla nis
+services: db files kenvng nis
 
 netgroup: files nis
 
