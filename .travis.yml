@@ -43,11 +43,15 @@ before_install:
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels scipy
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels cython
   - pip install coveralls
+  
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
 
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+  
   - pip install molecule
 
   # Install dependencies.
@@ -59,18 +63,24 @@ install:
   - git clone https://github.com/AlbanAndrieu/ansible-common.git alban.andrieu.common
   # - git clone https://github.com/geerlingguy/ansible-role-firewall.git geerlingguy.firewall
 
+  # Update Ansible submodule.
+#  - git pull && git submodule init && git submodule update && git submodule status
+#  - git submodule foreach git checkout master
+#
+#  - ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors
+  
 script:
   # Check ansible version
   - ansible --version
 
   # Check syntax
-  - ansible-playbook -i hosts --syntax-check administration.yml -e "python_versions=[2.7]"
+  - ansible-playbook -i ./hosts --syntax-check ./administration.yml -e "python_versions=[2.7]"
 
   # Molecule test
   # - molecule test
 
   # First run
-  - ansible-playbook -i hosts --connection=local --sudo -vvvv administration.yml -e "python_versions=[2.7]"
+  - ansible-playbook -i ./hosts --connection=local --sudo -vvvv ./administration.yml -e "python_versions=[2.7]"
 
   # - coverage run --source=yourpackagename setup.py test
 
@@ -78,8 +88,9 @@ after_success:
   - coveralls
 
 notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email:
     recipients:
       - alban.andrieu@free.fr
-    on_success: [always|never|change]    # default: change
-    on_failure: [always|never|change]    # default: always
+    on_success: [always|never|change] # default: change
+    on_failure: [always|never|change] # default: always
