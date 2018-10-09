@@ -55,6 +55,7 @@ install:
   - pip install molecule
 
   # Install dependencies.
+  - git clone https://github.com/geerlingguy/ansible-role-repo-epel geerlingguy.repo-epel  
   - git clone https://github.com/AlbanAndrieu/Stouts.python.git python
   - git clone https://github.com/AlbanAndrieu/ansible-role-ntp.git geerlingguy.ntp
   - git clone https://github.com/AlbanAndrieu/ansible-locale.git locale

@@ -357,12 +357,12 @@ EOU
             [ -n "$VERBOSE" ] && echo "$MSG_TYPE : $MSG"
             shift
             ;;
-        -r) MSG_TYPE="note" && MSG="override Linux release : $2"        
+        -r) MSG_TYPE="note" && MSG="override Linux release : $2"
             [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             my_Release="$2"
             shift 2
             ;;
-        -R) MSG_TYPE="note" && MSG="override product revision : $2"        
+        -R) MSG_TYPE="note" && MSG="override product revision : $2"
             [ -n "$DEBUG" ] && echo "$MSG_TYPE : $MSG"
             my_Revision="$2"
             shift 2

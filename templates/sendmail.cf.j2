@@ -565,7 +565,7 @@ O ProcessTitlePrefix=MTA
 #O ClientCertFile
 # Client private key
 #O ClientKeyFile
-# File containing certificate revocation lists 
+# File containing certificate revocation lists
 #O CRLFile
 # DHParameters (only required if DSA/DH is used)
 #O DHParameters
@@ -624,7 +624,7 @@ H?x?Full-Name: $x
 H?M?Resent-Message-Id: <$t.$i@$j>
 H?M?Message-Id: <$t.$i@$j>
 
-#
+#
 ######################################################################
 ######################################################################
 #####
@@ -1653,7 +1653,7 @@ R$* $| <?>$*	$@ no				no authinfo available
 R$* $| <$*> <>	$# $2
 
 ######################################################################
-###  RateControl: 
+###  RateControl:
 ###	Parameters:	ignored
 ###	return: $#error or OK
 ######################################################################
@@ -1668,7 +1668,7 @@ R<$+> $| TRUE	$#error $@ 4.3.2 $: 421 Connection rate limit exceeded.
 
 
 ######################################################################
-###  ConnControl: 
+###  ConnControl:
 ###	Parameters:	ignored
 ###	return: $#error or OK
 ######################################################################
@@ -1703,7 +1703,7 @@ R<?> <$+>		$: $>A < $1 > <?> <! GreetPause> <>	no: another lookup
 R<?> <$*>		$# 1000
 R<$* <TMPF>> <$*>	$@
 R<$+> <$*>		$# $1
-#
+#
 ######################################################################
 ######################################################################
 #####
@@ -1712,7 +1712,7 @@ R<$+> <$*>		$# $1
 ######################################################################
 ######################################################################
 
-#
+#
 ######################################################################
 ######################################################################
 #####
@@ -1887,7 +1887,7 @@ Mrelay,		P=[IPC], F=mDFMuXa8, S=EnvFromSMTP/HdrFromSMTP, R=MasqSMTP, E=\r\n, L=2
 # # If you modify this file, you will have to regenerate /etc/mail/sendmail.cf
 # # by running this file through the m4 preprocessor via one of the following:
 # #	* make   (or make -C /etc/mail)
-# #	* sendmailconfig 
+# #	* sendmailconfig
 # #	* m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf
 # # The first two options are preferred as they will also update other files
 # # that depend upon the contents of this file.
@@ -1972,4 +1972,4 @@ Mrelay,		P=[IPC], F=mDFMuXa8, S=EnvFromSMTP/HdrFromSMTP, R=MasqSMTP, E=\r\n, L=2
 # MAILER_DEFINITIONS
 # MAILER(`local')dnl
 # MAILER(`smtp')dnl
-# 
+#
