@@ -12,6 +12,18 @@
 
 # - import_tasks: subscription.yml
 
+- name: administration | Make sure multiverse is enabled for AWS tools or selinux
+  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04', '18.04']) and apt_install_multiverse_repositories
+  with_items: '{{apt_multiverse_repositories}}'
+  become: true
+
+- name: administration | Make sure multiverse is enabled for AWS tools or selinux
+  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04', '18.04']) and apt_install_multiverse_repositories
+  with_items: '{{apt_multiverse_repositories}}'
+  become: true
+
 - import_tasks: selinux.yml
 
 - import_tasks: hpe.yml
@@ -41,18 +53,6 @@
   tags: package
   with_items:
     - ssmtp
-  become: true
-
-- name: administration | Make sure multiverse is enabled for AWS tools
-  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
-  with_items: '{{apt_multiverse_repositories}}'
-  become: true
-
-- name: administration | Make sure multiverse is enabled for AWS tools
-  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04']) and apt_install_multiverse_repositories
-  with_items: '{{apt_multiverse_repositories}}'
   become: true
 
 - name: administration | Install AWS tools
