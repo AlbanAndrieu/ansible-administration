@@ -37,13 +37,14 @@
   copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
   become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ( ansible_distribution_release == 'precise' )
+  notify: restart nis
   tags: configure
 
 - name: administration | Configure yellow page file
   become: true
   template: src=yp.conf.j2 dest=/etc/yp.conf
   tags: configure
-  notify: restart nis
+  notify: restart yp
 
 - name: administration | Configure nis file
   become: true

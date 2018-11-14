@@ -124,7 +124,7 @@
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   when: (ansible_os_family != "Darwin")
   tags: configure
-  notify: restart ntp
+#  notify: restart ntp
   become: true
 
 - name: administration | Start the ntp service

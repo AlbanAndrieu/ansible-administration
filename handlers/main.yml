@@ -7,15 +7,6 @@
     state: restarted
     daemon_reload: true
     name: ntpd
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
-  become: true
-
-- name: restart ntp
-  systemd:
-    state: restarted
-    daemon_reload: true
-    name: ntpd
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: true
 
 - name: restart nis
@@ -24,15 +15,6 @@
     daemon_reload: true
     name: nis
   become: true
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-
-- name: restart nis
-  systemd:
-    state: restarted
-    daemon_reload: true
-    name: nis
-  become: true
-  when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
 
 - name: restart NetworkManager
   systemd:
