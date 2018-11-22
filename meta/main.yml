@@ -25,5 +25,4 @@ galaxy_info:
         - raring
         - saucy
         - trusty
-  categories:
-    - development
+  galaxy_tags: []
