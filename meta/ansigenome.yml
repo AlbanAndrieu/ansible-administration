@@ -10,7 +10,7 @@ galaxy_info:
   description: A role for installing common configuration
   company: Nabla
   license: Apache
-  min_ansible_version: 2.3.1.0
+  min_ansible_version: 2.6.0
   platforms:
     - name: Ubuntu
       versions:
@@ -24,15 +24,24 @@ galaxy_info:
         - raring
         - saucy
         - trusty
-  categories:
+  galaxy_tags:
     - development
 
 ansigenome_info:
   galaxy_id: ''
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/administration/'
   galaxy_user: 'alban.andrieu'
   galaxy_name: 'administration'
+  galaxy_docker_name: 'ansible-administration'
 
-  travis: false
+  travis: true
+
+  authors:
+    - name: 'Alban Andrieu'
+      url: 'fr.linkedin.com/in/nabla/'
+      email: 'alban.andrieu@free.fr'
+      twitter: 'AlbanAndrieu'
+      github: 'AlbanAndrieu'
 
   synopsis: |
     Describe your role in a few paragraphs....
