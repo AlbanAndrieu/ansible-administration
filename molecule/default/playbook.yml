@@ -1,7 +1,7 @@
 ---
 
 - name: Converge
-  hosts: centos_7
+  hosts: centos_7_administration
 
   roles:
     - role: geerlingguy.repo-epel
