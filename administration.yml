@@ -13,13 +13,12 @@
           - ansible_os_family in ['Debian', 'RedHat', 'CentOS', 'Windows', 'Solaris']
           - ansible_architecture in ['x86_64']
 
-- hosts: localhost
-
-  tasks:
-    - name: Install Ansible-Galaxy dependencies
-      shell: ansible-galaxy install -r requirements.yml -p ./roles/
-# shell: ansible-galaxy install -r requirements.yml -p ./roles/ --ignore-errors --force
-      ignore_errors: true
+#- hosts: localhost
+#
+#  tasks:
+#    - name: Install Ansible-Galaxy dependencies
+#      shell: ansible-galaxy install -r requirements.yml -p ./roles/
+#      ignore_errors: true
       
 #- import_playbook: python.yml
       
