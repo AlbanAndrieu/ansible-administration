@@ -1,6 +1,6 @@
 ---
 dependencies:
-  - { role: geerlingguy.repo-epel }
+#  - { role: geerlingguy.repo-epel }
   - { role: alban.andrieu.common }
 
 galaxy_info:

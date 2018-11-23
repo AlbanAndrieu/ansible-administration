@@ -6,10 +6,8 @@ python:
 #  - 3.4
 #  - 3.5
   - 3.6
-
 services:
   - docker
-
 cache:
   bundler:
   directories:
@@ -17,18 +15,15 @@ cache:
 env:
 #  - ANSIBLE_VERSION=latest
   - ANSIBLE_VERSION=2.7.2
-
-# sudo: false
+  global:
+    secure: MD73NCVzctbVmi2QnQtwtH/ISXN2K0alsLbixoaXl7gr3XvTB4sYB0u+KKtPV46jbeAlQqTRObPfQouPrsLsiNDYcpuN0I5bKsn3TTs4ZHIkD0I2Q9Wh3qNM2fYf9mw3ZUhvXVTEod0W7jzkVGb6kitRCJj8rioKKzvE/YdVsG4=
 sudo: required
 dist: trusty
-
-virtualenv:
-  system_site_packages: false
-
 branches:
   only:
-    - master
-
+  - master
+virtualenv:
+  system_site_packages: false
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install curl
@@ -42,7 +37,6 @@ before_install:
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels scipy
   - pip install --no-index --find-links=$HOME/.cache/pip/wheels cython
   - pip install coveralls
-
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
@@ -79,7 +73,7 @@ script:
   # - molecule test
 
   # First run
-  - ansible-playbook -i ./hosts --connection=local --sudo -vvvv ./administration.yml -e "python_versions=[2.7, 3.5]" -e "docker_gid=3000" -e "jenkins_id=3000"
+  - ansible-playbook -i ./hosts --connection=local -vvvv ./administration.yml -e "python_versions=[2.7, 3.5]" -e "docker_gid=3000" -e "jenkins_id=3000"
 
   # - coverage run --source=yourpackagename setup.py test
 
@@ -90,6 +84,6 @@ notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
   email:
     recipients:
-      - alban.andrieu@free.fr
+      - alban.andrieu@nabla.mobi
     on_success: [always|never|change]         # default: change
     on_failure: [always|never|change]         # default: always
