@@ -13,15 +13,15 @@
 # - import_tasks: subscription.yml
 
 - name: administration | Make sure multiverse is enabled for AWS tools or selinux
-  apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }} universe multiverse" state=present update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version true in ['14.04', '16.04']) and apt_install_multiverse_repositories
-  with_items: '{{apt_multiverse_repositories}}'
+  apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }} universe multiverse" state=present update_cache=true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['14.04', '16.04']) and apt_install_multiverse_repositories
+  with_items: '{{ apt_multiverse_repositories }}'
   become: true
 
 - name: administration | Make sure multiverse is enabled for AWS tools or selinux
   apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }}-updates universe multiverse" state=present update_cache=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['14.04', '16.04']) and apt_install_multiverse_repositories
-  with_items: '{{apt_multiverse_repositories}}'
+  with_items: '{{ apt_multiverse_repositories }}'
   become: true
 
 - import_tasks: selinux.yml
