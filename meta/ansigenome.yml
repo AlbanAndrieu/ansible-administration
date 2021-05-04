@@ -1,9 +1,9 @@
 ---
 ansigenome_info:
   galaxy_id: ''
-  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/administration/'
+  galaxy_url: 'https://galaxy.ansible.com/alban.andrieu/ansible-administration/'
   galaxy_user: 'alban.andrieu'
-  galaxy_name: 'administration'
+  galaxy_name: 'ansible-administration'
   galaxy_docker_name: 'ansible-administration'
 
   travis: true
