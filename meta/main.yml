@@ -1,7 +1,7 @@
 ---
 dependencies:
 #  - { role: geerlingguy.repo-epel }
-  - { role: alban.andrieu.common }
+  - { role: alban.andrieu.ansible_common }
 
 galaxy_info:
   author: Alban Andrieu
