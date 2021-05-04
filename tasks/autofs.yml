@@ -21,32 +21,69 @@
 - name: administration | Set automount mountpoints
   lineinfile: dest=/etc/{{automountPrefix}}direct create=yes regexp="^{{item.key}}\s" line="{{item.key}}    {{mountOptions}}    {{item.value}}"
   with_dict: "{{mountpoints}}"
+  become: true
   notify: restart autofs
+  tags:
+   - restart
+   - notify
+   - autofs
 
 - name: administration | Update auto.master
   lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="/net\s+-hosts" line="/net    -hosts"
+  become: true
   notify: restart autofs
+  tags:
+   - restart
+   - notify
+   - autofs
 
 - name: administration | Update auto.master
   lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="^/-\s" line="/-    /etc/{{automountPrefix}}direct    -intr{{autodirectNosuid}},timeo=100"
+  become: true
   notify: restart autofs
+  tags:
+   - restart
+   - notify
+   - autofs
 
-# - name: administration | Configure autofs file
+# - name: administration | Configure autofs master file
 #   template: src=auto.master-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.master
-#   tags: autofs
-#   notify: restart autofs
 #   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
 #   become: true
+#   notify: restart autofs
+#   tags:
+#    - restart
+#    - notify
+#    - autofs
+
+# - name: administration | Configure autofs misc file
+#   template: src=auto.misc-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.misc
+#   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+#   become: true
+#   notify: restart autofs
+#   tags:
+#    - restart
+#    - notify
+#    - autofs
 
 - name: administration | Configure autofs file
   template: src=rc.local-{{ ansible_distribution }}.j2 dest=/etc/rc.local
-  tags: configure
-  notify: restart autofs
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   become: true
+  notify: restart autofs
+  tags:
+   - configure
+   - restart
+   - notify
+   - autofs
+
 
 # - name: administration | Configure autofs file
 #   template: src=autofs_ldap_auth.conf.j2 dest=/etc/autofs_ldap_auth.conf
-#   tags: configure
-#   notify: restart autofs
 #   become: true
+#   notify: restart autofs
+#   tags:
+#    - configure
+#    - restart
+#    - notify
+#    - autofs

@@ -38,28 +38,39 @@
   become: true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ( ansible_distribution_release == 'precise' )
   notify: restart nis
-  tags: configure
+  tags:
+   - configure
+   - restart
+   - notify
+   - nis
 
 - name: administration | Configure yellow page file
   become: true
   template: src=yp.conf.j2 dest=/etc/yp.conf
-  tags: configure
   notify: restart yp
+  tags:
+   - configure
+   - restart
+   - notify
+   - yp
 
 - name: administration | Configure nis file
   become: true
   template: src=nsswitch.conf.j2 dest=/etc/nsswitch.conf
   tags: configure
-  
+
 - name: administration | Install network-manager
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
   with_items:
     - network-manager
-  become: true  
-#  notify: restart nis
+  become: true
   notify: restart NetworkManager
+  tags:
+   - package
+   - restart
+   - notify
+   - NetworkManager
 
 # - name: administration | Start the nis service
 #   become: true

@@ -4,9 +4,9 @@ ntpservers:
   - "ntp.ubuntu.com"
   - "timehost"
 
-nisserver: albandri
+nisserver: albandrieu
 mailserver: smtp.gmail.com
-defaultdomain: nabla.mobi
+defaultdomain: albandrieu.com
 
 apt_install_multiverse_repositories: true  # Install some repositories (see list bellow)
 apt_multiverse_repositories: ["http://us.archive.ubuntu.com/ubuntu/"]          # List of sources which be added
@@ -24,5 +24,9 @@ selinux_enabled: false
 automount_enabled: false
 nis_enabled: true
 autofs_enabled: true
+
+rhel_subscription_force_subscribe: yes
+rhel_subscription_username: ""
+rhel_subscription_password: ""
 
 mountpoints: {}

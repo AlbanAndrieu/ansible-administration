@@ -1,20 +1,49 @@
 ---
 
-# https://docs.ansible.com/ansible/redhat_subscription_module.html
+- name: Print RedHat input
+  debug: msg="RedHat input are {{ rhel_subscription_username }} {{ rhel_subscription_password }}"
+
+#TODO : systemctl status firewalld
+
+#Issue https://access.redhat.com/documentation/en-us/red_hat_subscription_management/1/html/rhsm/certs-troubleshoot-verify
+- name: Check certificate
+  command: "openssl x509 -text -in /etc/rhsm/ca/redhat-uep.pem"
+  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
+  become: true
+# If abover is failing it means that /etc/rhsm/ca/redhat-uep.pem can is missing. Please add it by hand
+
+- name: RedHat force unsubscribe
+  redhat_subscription:
+    state:     absent
+  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username|length > 0 and rhel_subscription_password|length > 0 and rhel_subscription_force_subscribe|bool
+  become: true
+  become_user: root
+  tags: os_subscription_rhel
+
+- name: Register in redhat
+  redhat_subscription:
+    force_register: "{{ rhel_subscription_force_subscribe|bool }}"
+    auto_attach:    yes
+    username:       "{{ rhel_subscription_username }}"
+    password:       "{{ rhel_subscription_password }}"
+    state:          present
+  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username|length > 0 and rhel_subscription_password|length > 0
+  become: true
+  become_user: root
+  tags: os_subscription_rhel
+
+#- name: Register and auto-subscribe to available content (RHSM)
+#  redhat_subscription:
+#    state: present
+#    username: "{{ rhel_subscription_username }}"
+#    password: "{{ rhel_subscription_password }}"
+#    autosubscribe: true
+#  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username|length > 0 and rhel_subscription_password|length > 0
+#  become: true
+#  become_user: root
+#  tags: os_subscription_rhel
 
 - name: Clean wrong repo
   command: "subscription-manager repos --disable=rhel-7-server-rt-beta-rpms"
   when: (ansible_distribution == 'Red Hat Enterprise Linux' or (ansible_distribution == 'RedHat' and ansible_distribution_major_version == '7'))
   become: true
-
-- name: Register and auto-subscribe to available content (RHSM)
-  redhat_subscription:
-    state: present
-    username: "{{rhel_subscription_username}}"
-    password: "{{rhel_subscription_password}}"
-    autosubscribe: true
-  when: (ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat') and rhel_subscription_username | length > 0
-  become: true
-  become_user: root
-
-# subscription-manager list

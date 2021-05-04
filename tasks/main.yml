@@ -13,14 +13,14 @@
 # - import_tasks: subscription.yml
 
 - name: administration | Make sure multiverse is enabled for AWS tools or selinux
-  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}} universe multiverse" state=present update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04', '18.04']) and apt_install_multiverse_repositories
+  apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }} universe multiverse" state=present update_cache=yes
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version true in ['14.04', '16.04']) and apt_install_multiverse_repositories
   with_items: '{{apt_multiverse_repositories}}'
   become: true
 
 - name: administration | Make sure multiverse is enabled for AWS tools or selinux
-  apt_repository: repo="deb {{ item }} {{ansible_lsb.codename}}-updates universe multiverse" state=present update_cache=yes
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version in ['12.04', '18.04']) and apt_install_multiverse_repositories
+  apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }}-updates universe multiverse" state=present update_cache=true
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['14.04', '16.04']) and apt_install_multiverse_repositories
   with_items: '{{apt_multiverse_repositories}}'
   become: true
 
@@ -31,18 +31,23 @@
 - import_tasks: dell.yml
 
 - name: administration | Install monitoring tools
-  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=true"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - snmp    # for cacti
     - snmpd   # for cacti
   become: true
+  ignore_errors: true
 
 - name: administration | Install monitoring tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - smartmontools
   become: true
@@ -72,7 +77,6 @@
   with_items:
     - daemon
     - mailutils
-#    - systemd-sysv
   become: true
 
 - name: administration | Install connection nfs client tools
@@ -86,7 +90,9 @@
 - name: administration | Install raid tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - mdadm
     - dmraid
@@ -96,7 +102,9 @@
 - name: administration | Install connection tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - ufw
   become: true
@@ -104,7 +112,9 @@
 - name: administration | Install hardware list tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - lshw
   become: true
@@ -115,7 +125,9 @@
 - name: administration | Install ntp
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
-  tags: package
+  tags:
+    - package
+    - vm
   with_items:
     - ntp
   become: true
@@ -123,14 +135,22 @@
 - name: administration | Configure ntp file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
   when: (ansible_os_family != "Darwin")
-  tags: configure
 #  notify: restart ntp
   become: true
+  tags:
+    - restart
+    - notify
+    - configure
+    - ntp
+    - vm
 
 - name: administration | Start the ntp service
   service: name=ntp state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: service
+  tags:
+    - service
+    - ntp
+    - vm
   become: true
   ignore_errors: true
 
@@ -141,24 +161,32 @@
 
 - name: administration | Install sendmail tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
-  when: (ansible_os_family != "Darwin")
-  tags: package
+  when: (ansible_os_family != "Darwin") and (ansible_distribution_version not in ['19.04'])
+  tags:
+    - package
+    - mail
+    - vm
   with_items:
+    - lsb-invalid-mta    # Ubuntu 19.04
     - sendmail
   become: true
   changed_when: false
+  ignore_errors: true    # Ubuntu 19.04
 
 - name: administration | Copy the sendmail configuration file
   template: src=sendmail.cf.j2 dest=/etc/mail/sendmail.cf mode=0755
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
-  tags: configure
+  tags:
+    - configure
+    - mail
+    - vm
   become: true
 
 # Copy current user key to root
 - import_tasks: copy-keys.yml
 
 - name: administration | Required by zabbix ansible role
-  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=true"
   tags: package
   with_items:
     - policycoreutils-python
@@ -168,7 +196,7 @@
   ignore_errors: true
 
 - name: administration | Required by zabbix ansible role
-  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=yes"
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ jenkins_pkg_state|default('present') }} update_cache=true"
   tags: package
   with_items:
     - policycoreutils

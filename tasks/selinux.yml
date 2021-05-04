@@ -1,19 +1,34 @@
 ---
 
+- name: administration | Install acl
+  action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+  with_items:
+   - acl
+  become: true
+  tags:
+    - package
+    - vm
+
 - name: administration | Install python-selinux
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }} update_cache=yes"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
   with_items:
    - python-selinux
    - selinux-policy-default
   become: true
+  tags:
+    - package
+    - vm
 
 - name: administration | Disabled SELinux
   selinux: state=disabled
   when: not selinux_enabled and not ansible_check_mode
   become: true
   ignore_errors: true
+  tags:
+    - package
+    - vm
 
 - meta: flush_handlers
   when: not selinux_enabled

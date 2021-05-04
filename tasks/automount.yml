@@ -11,17 +11,24 @@
   - rpcbind
   - nfslock
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
-  tags: service
   become: true
+  tags:
+    - service
+    - nis
+    - vm
 
 - name: administration | Start the autofs service
   service: name=autofs state=started enabled=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
-  tags: service
   become: true
+  tags:
+    - service
+    - autofs
+    - vm
 
 - meta: flush_handlers
 
-- pause:
+- name: administration | Pause
+  pause:
     seconds: 30
   when: (autofs_enabled or nis_enabled)
