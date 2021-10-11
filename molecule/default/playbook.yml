@@ -11,3 +11,5 @@
 
   roles:
     - role: alban.andrieu.administration
+      verbose: true
+  no_log: false

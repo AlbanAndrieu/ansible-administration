@@ -17,12 +17,22 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['14.04', '16.04']) and apt_install_multiverse_repositories
   with_items: '{{ apt_multiverse_repositories }}'
   become: true
+  tags:
+    - package
+    - universe
+    - multiverse
+    - aws
 
 - name: administration | Make sure multiverse is enabled for AWS tools or selinux
   apt_repository: repo="deb {{ item }} {{ ansible_lsb.codename }}-updates universe multiverse" state=present update_cache=true
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['14.04', '16.04']) and apt_install_multiverse_repositories
   with_items: '{{ apt_multiverse_repositories }}'
   become: true
+  tags:
+    - package
+    - universe
+    - multiverse
+    - aws
 
 - import_tasks: selinux.yml
 
@@ -55,69 +65,80 @@
 - name: administration | Install monitoring tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
-  tags: package
   with_items:
     - ssmtp
   become: true
+  tags:
+    - package
+    - vm
+    - ssmtp
 
 - name: administration | Install AWS tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and (ansible_distribution_version not in ['12.04'])
-  tags: package
   with_items:
     - ec2-api-tools
     - s3cmd
   become: true
   ignore_errors: true
+  tags:
+    - package
+    - aws
 
 - name: administration | Install other tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
   with_items:
     - daemon
     - mailutils
   become: true
+  tags:
+    - package
+    - vm
+    - mailutils
 
 - name: administration | Install connection nfs client tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version not in ['12.04', '14.04'])
-  tags: package
   with_items:
     - nfs-common
   become: true
+  tags:
+    - package
+    - vm
+    - nfs
 
 - name: administration | Install raid tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags:
-    - package
-    - vm
   with_items:
     - mdadm
     - dmraid
     - pciutils
   become: true
+  tags:
+    - package
+    - vm
 
 - name: administration | Install connection tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags:
-    - package
-    - vm
   with_items:
     - ufw
   become: true
+  tags:
+    - package
+    - vm
 
 - name: administration | Install hardware list tools
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags:
-    - package
-    - vm
   with_items:
     - lshw
   become: true
+  tags:
+    - package
+    - vm
 
 - import_tasks: automount.yml
   when: automount_enabled
@@ -125,12 +146,12 @@
 - name: administration | Install ntp
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_os_family != "Darwin")
-  tags:
-    - package
-    - vm
   with_items:
     - ntp
   become: true
+  tags:
+    - package
+    - vm
 
 - name: administration | Configure ntp file
   template: src=ntp.conf.j2 dest=/etc/ntp.conf
