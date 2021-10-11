@@ -12,18 +12,24 @@
 - name: administration | Install nis ypbind
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux' or ansible_distribution == 'RedHat')
-  tags: package
   with_items:
     - ypbind
   become: true
+  tags:
+    - package
+    - vm
+    - nis
 
 - name: administration | Install nis rpcbind
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
   when: not (( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' ) and (ansible_distribution_version in ['12.04', '14.04']))
-  tags: package
   with_items:
     - rpcbind
   become: true
+  tags:
+    - package
+    - vm
+    - nis
 
 - name: administration | Install nis ypbind
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -31,7 +37,10 @@
     - nis
   become: true
   when: ( ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' )
-  tags: package
+  tags:
+    - package
+    - vm
+    - nis
 
 - name: administration | Copy the nis init script
   copy: src=nis-{{ ansible_distribution }}-{{ ansible_architecture }}.sh dest=/etc/init.d/nis mode=0755
@@ -39,20 +48,21 @@
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu') and ( ansible_distribution_release == 'precise' )
   notify: restart nis
   tags:
-   - configure
-   - restart
-   - notify
-   - nis
+    - configure
+    - restart
+    - notify
+    - nis
 
 - name: administration | Configure yellow page file
   become: true
   template: src=yp.conf.j2 dest=/etc/yp.conf
   notify: restart yp
   tags:
-   - configure
-   - restart
-   - notify
-   - yp
+    - configure
+    - vm
+    - restart
+    - notify
+    - yp
 
 - name: administration | Configure nis file
   become: true
@@ -67,10 +77,11 @@
   become: true
   notify: restart NetworkManager
   tags:
-   - package
-   - restart
-   - notify
-   - NetworkManager
+    - package
+    - vm
+    - restart
+    - notify
+    - NetworkManager
 
 # - name: administration | Start the nis service
 #   become: true
