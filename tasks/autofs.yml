@@ -6,8 +6,11 @@
     - autofs
     - autofs5
   when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-  tags: package
   become: true
+  tags:
+    - package
+    - vm
+    - autofs
 
 - name: administration | Install automount packages
   action: "{{ ansible_pkg_mgr }} name={{ item }} state={{ util_pkg_state|default('present') }}"
@@ -15,8 +18,11 @@
     - autofs
     - nfs-utils
   when: (ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux')
-  tags: package
   become: true
+  tags:
+    - package
+    - vm
+    - autofs
 
 - name: administration | Set automount mountpoints
   lineinfile: dest=/etc/{{automountPrefix}}direct create=yes regexp="^{{item.key}}\s" line="{{item.key}}    {{mountOptions}}    {{item.value}}"
@@ -24,27 +30,28 @@
   become: true
   notify: restart autofs
   tags:
-   - restart
-   - notify
-   - autofs
+    - restart
+    - vm
+    - notify
+    - autofs
 
 - name: administration | Update auto.master
   lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="/net\s+-hosts" line="/net    -hosts"
   become: true
   notify: restart autofs
   tags:
-   - restart
-   - notify
-   - autofs
+    - restart
+    - notify
+    - autofs
 
 - name: administration | Update auto.master
   lineinfile: dest=/etc/{{automountPrefix}}master create=yes regexp="^/-\s" line="/-    /etc/{{automountPrefix}}direct    -intr{{autodirectNosuid}},timeo=100"
   become: true
   notify: restart autofs
   tags:
-   - restart
-   - notify
-   - autofs
+    - restart
+    - notify
+    - autofs
 
 # - name: administration | Configure autofs master file
 #   template: src=auto.master-{{ ansible_distribution }}-{{ ansible_architecture }}.j2 dest=/etc/auto.master
@@ -72,10 +79,10 @@
   become: true
   notify: restart autofs
   tags:
-   - configure
-   - restart
-   - notify
-   - autofs
+    - configure
+    - restart
+    - notify
+    - autofs
 
 
 # - name: administration | Configure autofs file
